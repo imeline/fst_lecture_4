@@ -1,13 +1,13 @@
 package com.fastcampusKDT4.dmaker.controller;
 
-import com.fastcampusKDT4.dmaker.dto.CreateDeveloper;
-import com.fastcampusKDT4.dmaker.dto.DeveloperDetailDto;
-import com.fastcampusKDT4.dmaker.dto.DeveloperDto;
-import com.fastcampusKDT4.dmaker.dto.EditDeveloper;
+import com.fastcampusKDT4.dmaker.dto.*;
+import com.fastcampusKDT4.dmaker.exception.DMakerException;
 import com.fastcampusKDT4.dmaker.service.DMakerService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -67,5 +67,20 @@ public class DMakerController {
     @DeleteMapping("/developer/{memberId}")
     public DeveloperDetailDto deleteDeveloper(@PathVariable String memberId) {
         return dMakerService.deleteDeveloper(memberId);
+    }
+
+    @ResponseStatus(value = HttpStatus.CONFLICT)
+    // HTTP/1.1 200 에러는 이상하니까, 409 에러가 떨어지게 CONFLICT인 상수 값 사용
+    // 이번처럼 status을 지정하기보단 세부적인 에러 코드와 에러 메세지에서 정확한 에러의 종류나 원인을 내려주는 게 더 추세
+    @ExceptionHandler(DMakerException.class)
+    // 이 controller 에서 발생하는 DMakerException은 여기서 처리
+    // 복잡하게 각 메소드들이 에러처리를 갖게 하지 않고, 여기서 글로벌하게 처리하게 해줌
+    public DMakerErrorResponse handldException (DMakerException e, HttpServletRequest request) { // 요청이 들어온 request를 받을 수 있음
+        log.error("errorCode: {}, url: {}, message: {}", e.getDMakerErrorCode(), request.getRequestURI(), e.getDetailMessage());
+
+        return DMakerErrorResponse.builder()
+                .errorCode(e.getDMakerErrorCode())
+                .errorMessage(e.getDetailMessage())
+                .build();
     }
 }
