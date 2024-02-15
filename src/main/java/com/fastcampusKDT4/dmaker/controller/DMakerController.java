@@ -1,17 +1,15 @@
 package com.fastcampusKDT4.dmaker.controller;
 
 import com.fastcampusKDT4.dmaker.dto.CreateDeveloper;
+import com.fastcampusKDT4.dmaker.dto.DeveloperDetailDto;
+import com.fastcampusKDT4.dmaker.dto.DeveloperDto;
+import com.fastcampusKDT4.dmaker.dto.EditDeveloper;
 import com.fastcampusKDT4.dmaker.service.DMakerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Slf4j
@@ -27,10 +25,18 @@ public class DMakerController {
     private final DMakerService dMakerService;
 
     @GetMapping("/developers")
-    public List<String> getAllDevelopers() {
+    public List<DeveloperDto> getAllDevelopers() {
         log.info("GET /developers HTTP/1.1");
 
-        return Arrays.asList("snow", "Elsa", "Olaf");
+        return dMakerService.getAllEmployedDevelopers();
+
+    }
+
+    @GetMapping("/developer/{memberId}")
+    public DeveloperDetailDto getDeveloperDetail(@PathVariable String memberId) {
+        log.info("GET /developers HTTP/1.1");
+
+        return dMakerService.getDeveloperDetail(memberId);
 
     }
 
@@ -38,7 +44,7 @@ public class DMakerController {
     public CreateDeveloper.Response createDevelopers(@Valid @RequestBody CreateDeveloper.Request request)
     // http 스펙에서 맨위부터 요청라인, 헤더, 그 다음이 requestbody 부분인데, 그걸 @RequestBody 뒤 변수에 담음
     // @Valid 는 CreateDeveloper 의 @Notnull 같은 유효성이 동작하게 해줌
-     {
+    {
         //GET /create-developer HTTP/1.1
         log.info("request : {}", request);
         //request 정보 찍어봄, CreateDeveloper에 toString 있으면 찍기 좋음
@@ -49,5 +55,17 @@ public class DMakerController {
         //return Collections.singletonList("Olaf");
         // 단일 객체를 가진 list는 arraylist보다 이게 맞음
 
+    }
+
+    @PutMapping("/developer/{memberId}")
+    public DeveloperDetailDto editDeveloper(@PathVariable String memberId, @Valid @RequestBody EditDeveloper.Request request) {
+        log.info("GET /developers HTTP/1.1");
+
+        return dMakerService.editDeveloper(memberId, request);
+    }
+
+    @DeleteMapping("/developer/{memberId}")
+    public DeveloperDetailDto deleteDeveloper(@PathVariable String memberId) {
+        return dMakerService.deleteDeveloper(memberId);
     }
 }

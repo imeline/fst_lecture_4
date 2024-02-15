@@ -16,7 +16,7 @@ public class CreateDeveloper {
     @NoArgsConstructor
     @Builder
     @ToString
-    public static class Request{
+    public static class Request {
         @NotNull //데이터 유효성 검증
         private DeveloperLevel developerLevel;
         @NotNull
@@ -27,20 +27,21 @@ public class CreateDeveloper {
         private Integer experienceYears;
 
         @NotNull
-        @Size(min =3, max = 50, message = "memberId size must 3~50")
+        @Size(min = 3, max = 50, message = "memberId size must 3~50")
         private String memberId;
         @NotNull
-        @Size(min =3, max = 20, message = "memberId size must 3~20")
+        @Size(min = 3, max = 20, message = "memberId size must 3~20")
         private String name;
         @Min(18)
         private Integer age;
     }
+
     @Getter
     @Setter
     @AllArgsConstructor
     @NoArgsConstructor
     @Builder
-    public static class Response{
+    public static class Response {
         private DeveloperLevel developerLevel;
         private DeveloperSkillType developerSkillType;
         private Integer experienceYears;

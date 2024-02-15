@@ -1,5 +1,6 @@
 package com.fastcampusKDT4.dmaker.entity;
 
+import com.fastcampusKDT4.dmaker.code.StatusCode;
 import com.fastcampusKDT4.dmaker.type.DeveloperLevel;
 import com.fastcampusKDT4.dmaker.type.DeveloperSkillType;
 import jakarta.persistence.*;
@@ -34,6 +35,10 @@ public class Developer {
     private String memberId;
     private String name;
     private Integer age;
+
+    @Enumerated(EnumType.STRING)
+    private StatusCode statusCode;
+    // 고용인지 퇴직 상태 인지
 
     @CreatedDate // jpa에서 자동으로 생성일 값 세팅
     private LocalDateTime createAt;
