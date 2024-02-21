@@ -31,7 +31,6 @@ public class DMakerService {
 
     @Transactional //ACID 특성
     // 이 어노테이션을 단 로직은 자동으로 한 트랜잭션으로 되서, 중간에 오류 시 이 단위로 롤백함
-
     public CreateDeveloper.Response createDeveloper(CreateDeveloper.Request request) // 여기 @valid 필요 없으면 안 넣어도 됨
     {
         validateCreateDeveloperRequest(request);
